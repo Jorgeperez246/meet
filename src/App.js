@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     events: [],
     locations: [],
+    numberOfEvents: 25,
   };
   componentDidMount() {
     this.mounted = true;
@@ -22,14 +23,19 @@ class App extends Component {
   componentWillUnmount() {
     this.mounted = false;
   }
-  updateEvents = (location) => {
+  updateEvents = (location, eventNum) => {
+    if (!location) location = "all";
+    !eventNum
+      ? (eventNum = this.state.numberOfEvents)
+      : this.setState({ numberOfEvents: eventNum });
+
     getEvents().then((events) => {
       const locationEvents =
         location === "all"
           ? events
           : events.filter((event) => event.location === location);
       this.setState({
-        events: locationEvents,
+        events: locationEvents.slice(0, eventNum),
       });
     });
   };
@@ -41,7 +47,10 @@ class App extends Component {
           updateEvents={this.updateEvents}
         />
         <EventList events={this.state.events} />
-        <NumberOfEvents />
+        <NumberOfEvents
+          numberOfEvents={this.state.numberOfEvents}
+          updateEvents={this.updateEvents}
+        />
       </div>
     );
   }
