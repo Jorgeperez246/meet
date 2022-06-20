@@ -7,7 +7,7 @@ class NumberOfEvents extends Component {
 
   handleInputChanged = (event) => {
     const value = event.target.value;
-    if (!isNaN(value) && value >= 1) {
+    if (!isNaN(value) && value >= 1 && value <= 25) {
       this.setState({ numberOfEvents: value });
     } else {
       console.log("Please enter a valid number.");
